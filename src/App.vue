@@ -1,9 +1,7 @@
 <template>
   <div id="app">
     <Header/>
-    <b-container variant="pp-secondary">
-    <router-link to="/">Home</router-link>
-    </b-container>
+    <router-view to="/">Home</router-view>
   </div>
 </template>
 
@@ -19,8 +17,5 @@ export default {
 </script>
 
 <style>
-#app{
-  background-color:#659DBD;
-  min-height:100vh;
-}
+
 </style>
