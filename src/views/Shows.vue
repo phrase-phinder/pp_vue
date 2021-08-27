@@ -41,17 +41,17 @@ export default {
             return `/search/${show}`;
         }
     },
-    mounted(){
+    created(){
         axios
-            .get("http://localhost:7070/api/movie")
+            .get("http://phrasephinder.com:7070/api/movie")
             .then(response => (this.movies = response.data));
         
         axios
-            .get("http://localhost:7070/api/series")
+            .get("http://phrasephinder.com:7070/api/series")
             .then(response => (this.series = response.data));
 
         axios
-            .get("http://localhost:7070/api/comedian")
+            .get("http://phrasephinder.com:7070/api/comedian")
             .then(response => (this.comedians = response.data));
     },
 
