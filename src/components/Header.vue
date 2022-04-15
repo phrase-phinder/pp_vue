@@ -44,15 +44,15 @@ export default {
     },
     created(){
         axios
-            .get("http://phrasephinder.com:7070/api/movie")
+            .get(process.env.VUE_APP_API + "/api/movie")
             .then(response => (this.movies = response.data.slice(0,5)));
         
         axios
-            .get("http://phrasephinder.com:7070/api/series")
+            .get(process.env.VUE_APP_API + "/api/series")
             .then(response => (this.series = response.data.slice(0,5)));
 
         axios
-            .get("http://phrasephinder.com:7070/api/comedian")
+            .get(process.env.VUE_APP_API + "/api/comedian")
             .then(response => (this.comedians = response.data.slice(0,5)));
     },
   methods: {

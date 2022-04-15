@@ -3,8 +3,8 @@ const fs = require('fs')
 module.exports = {
     devServer: {
         https: {
-          key: fs.readFileSync('phrasephinder.com+4-key.pem'),
-          cert: fs.readFileSync('phrasephinder.com+4.pem'),
+          key: fs.readFileSync('ssl/private.key'),
+          cert: fs.readFileSync('ssl/certificate.crt'),
         },
         public: 'https://phrasephinder.com'
     }

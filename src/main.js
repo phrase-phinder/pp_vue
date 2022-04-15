@@ -10,7 +10,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
 Vue.use(router)
-
+console.log("api" + process.env.VUE_APP_API)
 new Vue({
   router,
   render: h => h(App)

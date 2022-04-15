@@ -3,7 +3,7 @@
     <b-container class="flex-column">
 
         <p id="start-text">Searching phrases from <span style="text-decoration:bold;">{{show | replaceUnderscores}}</span></p>
-        <p class="sub-text">Find other shows to search by clicking <router-link class="link" to="/shows">here</router-link></p> 
+        <p class="sub-text">Find other shows to search by clicking <router-link class="link" to="/shows">here</router-link></p>
         <b-form-input placeholder="Enter your phrase here..." v-model="phrase"></b-form-input>
         <div id="button-container">
             <b-button id="search-btn" pill variant="primary" @click="search()">Search</b-button>
@@ -11,10 +11,13 @@
         <div v-if="occurences != null">
             <p class="sub-text">We found that phrase {{occurences_num}} times.</p>
             <div v-for="(occurence, index) in occurences" :key="index">
-                <b-card class="card" :title="occurence.episodeName" :sub-title="getEpisodeString(occurence.seasonNum,occurence.episodeNum)">
+                <b-card class="card" :title="occurence.EpisodeName" :sub-title="getEpisodeString(occurence.Season,occurence.Episode)">
                 <b-card-text class="black">
-                Found between {{occurence.startTime | parseTime}} and {{occurence.endTime | parseTime}}
+                Found between {{occurence.Start | parseTime}} and {{occurence.End | parseTime}}
                 </b-card-text>
+                <b-card-footer>
+                    <b-card-text>"{{occurence.before}}<div class="bold">{{occurence.phrase}}</div>{{occurence.after}}"</b-card-text>
+                </b-card-footer>
                 </b-card>
             </div>
         </div>
@@ -40,9 +43,9 @@ export default {
       return value.replace(/_/g, " ");
     },
     parseTime: function(duration){
-        let seconds = Math.floor((duration / 10000000) % 60),
-        minutes = Math.floor((duration / (10000000 * 60)) % 60),
-        hours = Math.floor((duration / (10000000 * 60 * 60)) % 24);
+        let seconds = Math.floor((duration) % 60),
+        minutes = Math.floor((duration / (60)) % 60),
+        hours = Math.floor((duration / (60 * 60)) % 24);
 
         hours = (hours < 10) ? "0" + hours : hours;
         minutes = (minutes < 10) ? "0" + minutes : minutes;
@@ -68,17 +71,16 @@ export default {
   },
   created() {
     this.checkShowExists(this.$route.params.show);
-
   },
   methods:{
       search: function(){
-          var bodyFormData = new FormData();
-          bodyFormData.append('show',this.show);
-          bodyFormData.append('phrase',this.phrase);
           axios({
             method: "post",
-            url: "http://phrasephinder.com:7070/api/search",
-            data: bodyFormData
+            url: process.env.VUE_APP_API + "/search",
+            data: {
+                show:'The_Office',
+                phrase:this.phrase
+            }
             }).then(response => {
                 this.occurences = response.data;
                 this.occurences_num = response.data.length;
@@ -94,7 +96,7 @@ export default {
       },
       checkShowExists: function(showP){
           axios
-                .get("http://phrasephinder.com:7070/api/shows")
+                .get(process.env.VUE_APP_API + "/api/shows")
                 .then(response => {
                     this.all_shows = response.data;
                     if (response.data.includes(showP)){
@@ -112,6 +114,9 @@ export default {
 #button-container{
     max-width: 600px;
     margin: 0 auto;
+}
+li{
+    color: white;
 }
 p{
     text-align:center;
@@ -148,6 +153,10 @@ p{
     #show-img{
     max-width:100vw;
     }
+}
+.bold{
+    color: black;
+    font-weight: 1000;
 }
 #root{
   background-color:#659DBD;
