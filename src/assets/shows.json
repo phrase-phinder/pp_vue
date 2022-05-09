@@ -1,0 +1,45 @@
+{
+ "comedian": [
+  "Dave_Chappelle"
+ ],
+ "movie": [
+  "Austin_Powers_The_Spy_Who_Shagged_Me",
+  "Bad_Trip",
+  "Bee_Movie",
+  "Due_Date",
+  "Hot_Rod",
+  "Madagascar_2",
+  "Nacho_Libre",
+  "No_Strings_Attached",
+  "Superbad",
+  "Talladega_Nights",
+  "The_Other_Guys",
+  "Year_One",
+  "Yes_Man"
+ ],
+ "series": [
+  "All_American",
+  "Arrested_Development",
+  "Avatar_the_Last_Air_Bender",
+  "Better_Call_Saul",
+  "Big_Mouth",
+  "Breaking_Bad",
+  "Brooklyn_Nine_Nine",
+  "Chappelles_Show",
+  "Comedians_in_Cars_Getting_Coffee",
+  "Community",
+  "How_I_Met_Your_Mother",
+  "Money_Heist",
+  "Narcos",
+  "New_Girl",
+  "Outer_Banks",
+  "Ozark",
+  "Queens_Gambit",
+  "Schitts_Creek",
+  "Shameless",
+  "Stranger_Things",
+  "The_Last_Dance",
+  "The_Office",
+  "The_Walking_Dead"
+ ]
+}

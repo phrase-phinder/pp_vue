@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import shows from '../assets/shows.json'
 export default {
     name: 'Header',
     data(){
@@ -43,17 +43,9 @@ export default {
         }
     },
     created(){
-        axios
-            .get(process.env.VUE_APP_API + "/api/movie")
-            .then(response => (this.movies = response.data.slice(0,5)));
-        
-        axios
-            .get(process.env.VUE_APP_API + "/api/series")
-            .then(response => (this.series = response.data.slice(0,5)));
-
-        axios
-            .get(process.env.VUE_APP_API + "/api/comedian")
-            .then(response => (this.comedians = response.data.slice(0,5)));
+        this.movies = shows.movie.slice(0,5);
+        this.series = shows.series.slice(0,5)
+        this.comedians = shows.comedian.slice(0,5)
     },
   methods: {
         getUrl: function(show){

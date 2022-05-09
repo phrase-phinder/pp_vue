@@ -2,7 +2,7 @@
     <div id="root">
     <b-container class="flex-column">
 
-        <p id="start-text">Searching phrases from <span style="text-decoration:bold;">{{show | replaceUnderscores}}</span></p>
+        <p id="start-text">Searching phrases from <span style="text-decoration:bold;">{{this.$route.params.show | replaceUnderscores}}</span></p>
         <p class="sub-text">Find other shows to search by clicking <router-link class="link" to="/shows">here</router-link></p>
         <b-form-input placeholder="Enter your phrase here..." v-model="phrase"></b-form-input>
         <div id="button-container">
@@ -15,9 +15,6 @@
                 <b-card-text class="black">
                 Found between {{occurence.Start | parseTime}} and {{occurence.End | parseTime}}
                 </b-card-text>
-                <b-card-footer>
-                    <b-card-text>"{{occurence.before}}<div class="bold">{{occurence.phrase}}</div>{{occurence.after}}"</b-card-text>
-                </b-card-footer>
                 </b-card>
             </div>
         </div>
@@ -31,7 +28,6 @@ export default {
     name: 'Home',
     data(){
         return{
-            show: "",
             phrase: "",
             occurences: null,
             occurences_num: null,
@@ -58,51 +54,40 @@ export default {
     }
   },
   watch: {
-    $route() {
-      if(this.all_shows.includes(this.$route.params.show)){
-          this.show = this.$route.params.show;
-      }
-      else{
-          this.show = "";
-      }
-      this.occurences = null;
-      this.phrase = "";
+    $route(next) {
+        this.occurences = null;
+        this.phrase = this.$route.params.phrase;
+        next()
     }
   },
   created() {
-    this.checkShowExists(this.$route.params.show);
+      this.phrase = this.$route.query.phrase;
+      if(this.phrase != ""){
+          this.search()
+      }
   },
   methods:{
       search: function(){
-          axios({
-            method: "post",
-            url: process.env.VUE_APP_API + "/search",
-            data: {
-                show:'The_Office',
-                phrase:this.phrase
-            }
-            }).then(response => {
-                this.occurences = response.data;
-                this.occurences_num = response.data.length;
+          this.$router.push({path: this.$route.path, query: {phrase: this.phrase} });
+          if(this.phrase.split(' ').length >= 2){
+              axios({
+                method: "get",
+                url: `${process.env.VUE_APP_API}/${this.$route.params.show}`,
+                params: {
+                    phrase:this.phrase
+                }
+                }).then(response => {
+                    this.occurences = response.data["Occurences"];
+                    this.occurences_num = response.data["Occurences"].length;
             }
             );
-        
+          }
       },
       getEpisodeString: function(season, episode){
           if(season == 0 && episode == 0){
               return "";
           }
           return `Season ${season} Episode ${episode}`;
-      },
-      checkShowExists: function(showP){
-          axios
-                .get(process.env.VUE_APP_API + "/api/shows")
-                .then(response => {
-                    this.all_shows = response.data;
-                    if (response.data.includes(showP)){
-                        this.show = showP;
-                    }
-                }).catch(this.show = "");
       }
   }
 

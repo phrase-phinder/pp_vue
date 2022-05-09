@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import shows from '../assets/shows.json'
 export default {
     name: 'Header',
     data(){
@@ -42,17 +42,9 @@ export default {
         }
     },
     created(){
-        axios
-            .get(process.env.VUE_APP_API + "/api/movie")
-            .then(response => (this.movies = response.data));
-        
-        axios
-            .get(process.env.VUE_APP_API + "/api/series")
-            .then(response => (this.series = response.data));
-
-        axios
-            .get(process.env.VUE_APP_API + "/api/comedian")
-            .then(response => (this.comedians = response.data));
+       this.movies = shows.movie
+        this.series = shows.series
+        this.comedians = shows.comedian
     },
 
   filters:{
