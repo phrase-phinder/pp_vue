@@ -6,7 +6,7 @@
         <p class="sub-text">Find other shows to search by clicking <router-link class="link" to="/shows">here</router-link></p>
         <b-form-input placeholder="Enter your phrase here..." v-model="phrase"></b-form-input>
         <div id="button-container">
-            <b-button id="search-btn" pill variant="primary" @click="search()">Search</b-button>
+            <b-button id="search-btn" pill variant="primary" @click="searchCached()">Search</b-button>
         </div>
         <div v-if="occurences != null">
             <p class="sub-text">We found that phrase {{occurences_num}} times.</p>
@@ -63,26 +63,41 @@ export default {
   created() {
       this.phrase = this.$route.query.phrase;
       if(this.phrase != ""){
-          this.search()
+          this.searchCached()
       }
   },
   methods:{
-      search: function(){
-          this.$router.push({path: this.$route.path, query: {phrase: this.phrase} });
+      searchCached: function(){
+          this.$router.push({path: this.$route.path, query: {phrase: this.phrase}});
           if(this.phrase.split(' ').length >= 2){
               axios({
                 method: "get",
-                url: `${process.env.VUE_APP_API}/${this.$route.params.show}`,
+                url: `${process.env.VUE_APP_API}/`,
                 params: {
-                    phrase:this.phrase
+                    phrase:this.phrase,
+                    show:this.$route.params.show
                 }
                 }).then(response => {
-                    this.occurences = response.data["Occurences"];
-                    this.occurences_num = response.data["Occurences"].length;
-            }
+                    if(response.status == 200){
+                        this.occurences = response.data["Occurences"];
+                        this.occurences_num = response.data["Occurences"].length;
+                    }
+                    else if(response.status == 303){
+                        this.search(response.headers.location)
+                    }
+                }
             );
           }
       },
+      search: function(location){
+        axios({
+        method: "get",
+        url: location
+        }).then(response => {
+                this.occurences = response.data["Occurences"];
+                this.occurences_num = response.data["Occurences"].length;
+        });
+    },
       getEpisodeString: function(season, episode){
           if(season == 0 && episode == 0){
               return "";
